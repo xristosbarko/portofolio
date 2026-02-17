@@ -1,0 +1,230 @@
+.skill-tree {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ---- TREE SELECTOR ---- */
+.tree-selector {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.tree-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-dim);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s;
+  color: var(--text-secondary);
+  font-family: var(--font-pixel);
+}
+
+.tree-tab:hover {
+  border-color: var(--tree-color, var(--neon-cyan));
+  color: var(--tree-color, var(--neon-cyan));
+}
+
+.tree-tab.active {
+  background: var(--bg-card-hover);
+  border-color: var(--tree-color, var(--neon-cyan));
+  color: var(--tree-color, var(--neon-cyan));
+  box-shadow: 0 0 15px rgba(0,0,0,0.5), inset 0 0 20px rgba(0,0,0,0.3);
+}
+
+.tree-icon {
+  font-size: 1.4rem;
+}
+
+.tree-name {
+  font-size: 0.38rem;
+  letter-spacing: 1px;
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* ---- TREE HEADER ---- */
+.tree-header-card {
+  background: var(--bg-card);
+}
+
+.tree-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.tree-title {
+  font-family: var(--font-pixel);
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+}
+
+.tree-xp {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.tree-mastery {
+  text-align: right;
+}
+
+.mastery-label {
+  font-family: var(--font-pixel);
+  font-size: 0.35rem;
+  color: var(--text-secondary);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.mastery-stars {
+  font-size: 1rem;
+  color: #ffcc00;
+  text-shadow: 0 0 8px #ffcc00;
+}
+
+.tree-hint {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+}
+
+/* ---- SKILLS GRID ---- */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.skill-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-dim);
+  border-radius: 8px;
+  padding: 14px;
+  cursor: pointer;
+  transition: all 0.25s;
+  position: relative;
+  overflow: hidden;
+  animation: skillIn 0.4s ease both;
+}
+
+@keyframes skillIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.skill-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--skill-color, var(--neon-cyan));
+  transform: scaleX(0);
+  transition: transform 0.3s;
+  transform-origin: left;
+}
+
+.skill-card:hover {
+  border-color: var(--skill-color, var(--neon-cyan));
+  background: var(--bg-card-hover);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 20px rgba(0,0,0,0.2);
+}
+
+.skill-card:hover::before {
+  transform: scaleX(1);
+}
+
+.skill-card.studied {
+  border-color: var(--skill-color, var(--neon-cyan));
+  background: var(--bg-card-hover);
+}
+
+.skill-card.studied::before {
+  transform: scaleX(1);
+}
+
+.skill-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 6px;
+}
+
+.skill-name {
+  font-family: var(--font-hud);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.5px;
+}
+
+.studied-badge {
+  font-family: var(--font-pixel);
+  font-size: 0.28rem;
+  color: var(--neon-green);
+  letter-spacing: 1px;
+}
+
+.skill-tier-label {
+  font-family: var(--font-pixel);
+  font-size: 0.32rem;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+.skill-progress {
+  height: 6px;
+  margin-bottom: 8px;
+}
+
+.skill-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.skill-stars {
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+}
+
+.skill-level {
+  font-family: var(--font-pixel);
+  font-size: 0.38rem;
+}
+
+.skill-xp-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  color: var(--text-secondary);
+  background: var(--bg-deep);
+  padding: 2px 6px;
+  border-radius: 3px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.skill-card:hover .skill-xp-badge {
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .tree-selector {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .skills-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+}

@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 — AREA LOCKED | DEV.CHARACTER</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --neon-cyan:    #00f5ff;
+      --neon-pink:    #ff2d78;
+      --neon-purple:  #7b2fff;
+      --neon-orange:  #ff6b00;
+      --neon-green:   #00ff88;
+      --bg-void:      #03030a;
+      --bg-deep:      #07071a;
+      --bg-card:      #0d0d1f;
+      --border-dim:   #1a1a3e;
+      --border-glow:  #2a2a6e;
+      --text-primary: #e8e8ff;
+      --text-secondary:#8888aa;
+      --font-pixel:   'Press Start 2P', monospace;
+      --font-hud:     'Rajdhani', sans-serif;
+      --font-mono:    'Share Tech Mono', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg-void);
+      color: var(--text-primary);
+      font-family: var(--font-hud);
+      min-height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── Particle canvas ── */
+    #particles {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ── Scan lines ── */
+    .scanlines {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.08) 2px,
+        rgba(0,0,0,0.08) 4px
+      );
+      pointer-events: none;
+    }
+
+    /* ── Main container ── */
+    .container {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 2rem;
+      max-width: 680px;
+      width: 100%;
+    }
+
+    /* ── Error code ── */
+    .error-code {
+      font-family: var(--font-pixel);
+      font-size: clamp(4rem, 18vw, 8rem);
+      line-height: 1;
+      color: var(--neon-pink);
+      text-shadow:
+        0 0 10px var(--neon-pink),
+        0 0 40px rgba(255,45,120,0.5),
+        0 0 80px rgba(255,45,120,0.2);
+      animation: glitch 3s infinite;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.5rem;
+    }
+
+    @keyframes glitch {
+      0%, 90%, 100% { transform: translate(0); clip-path: none; }
+      91% {
+        transform: translate(-3px, 1px);
+        clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%);
+        color: var(--neon-cyan);
+        text-shadow: 3px 0 0 var(--neon-pink), -3px 0 0 var(--neon-cyan);
+      }
+      93% {
+        transform: translate(3px, -1px);
+        clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%);
+        color: var(--neon-pink);
+        text-shadow: -3px 0 0 var(--neon-cyan), 3px 0 0 var(--neon-pink);
+      }
+      95% { transform: translate(0); clip-path: none; }
+    }
+
+    /* ── Quest not found label ── */
+    .quest-label {
+      font-family: var(--font-pixel);
+      font-size: clamp(0.5rem, 2.5vw, 0.75rem);
+      color: var(--neon-cyan);
+      letter-spacing: 0.12em;
+      text-shadow: 0 0 12px var(--neon-cyan);
+      margin-bottom: 2.5rem;
+    }
+
+    /* ── HUD card ── */
+    .hud-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-glow);
+      border-radius: 4px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      position: relative;
+      box-shadow:
+        0 0 0 1px var(--border-dim),
+        0 0 30px rgba(123,47,255,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.03);
+    }
+
+    .hud-card::before {
+      content: '[ ERROR LOG ]';
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--neon-purple);
+      position: absolute;
+      top: -0.6rem;
+      left: 1.2rem;
+      background: var(--bg-card);
+      padding: 0 0.5rem;
+      letter-spacing: 0.1em;
+    }
+
+    .log-line {
+      font-family: var(--font-mono);
+      font-size: clamp(0.7rem, 2vw, 0.9rem);
+      color: var(--text-secondary);
+      line-height: 1.9;
+      text-align: left;
+    }
+
+    .log-line .tag {
+      color: var(--neon-orange);
+    }
+    .log-line .val {
+      color: var(--neon-cyan);
+    }
+    .log-line .err {
+      color: var(--neon-pink);
+    }
+    .log-line .ok {
+      color: var(--neon-green);
+    }
+
+    /* ── Blinking cursor ── */
+    .cursor {
+      display: inline-block;
+      width: 0.6em;
+      height: 1em;
+      background: var(--neon-cyan);
+      vertical-align: text-bottom;
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
+    }
+
+    /* ── XP penalty badge ── */
+    .penalty-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 45, 120, 0.1);
+      border: 1px solid rgba(255, 45, 120, 0.4);
+      border-radius: 3px;
+      padding: 0.4rem 1rem;
+      font-family: var(--font-pixel);
+      font-size: 0.55rem;
+      color: var(--neon-pink);
+      letter-spacing: 0.1em;
+      text-shadow: 0 0 8px rgba(255,45,120,0.6);
+      margin-bottom: 2rem;
+      animation: penaltyPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes penaltyPulse {
+      0%, 100% { box-shadow: 0 0 0px rgba(255,45,120,0); }
+      50%       { box-shadow: 0 0 18px rgba(255,45,120,0.35); }
+    }
+
+    /* ── Return button ── */
+    .return-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: var(--font-pixel);
+      font-size: 0.65rem;
+      color: var(--bg-void);
+      background: var(--neon-cyan);
+      border: none;
+      padding: 0.9rem 2rem;
+      border-radius: 3px;
+      cursor: pointer;
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      box-shadow:
+        0 0 20px rgba(0,245,255,0.4),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+      transition: all 0.15s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .return-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%);
+      transform: translateX(-100%);
+      transition: transform 0.4s ease;
+    }
+
+    .return-btn:hover::before {
+      transform: translateX(100%);
+    }
+
+    .return-btn:hover {
+      background: var(--neon-pink);
+      box-shadow:
+        0 0 30px rgba(255,45,120,0.55),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+      transform: translateY(-2px);
+    }
+
+    .return-btn:active {
+      transform: translateY(0);
+    }
+
+    /* ── Footer ── */
+    .footer-note {
+      margin-top: 2.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--border-glow);
+      letter-spacing: 0.08em;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="particles"></canvas>
+  <div class="scanlines"></div>
+
+  <div class="container">
+    <div class="error-code">404</div>
+    <div class="quest-label">⚠ QUEST NOT FOUND — AREA LOCKED ⚠</div>
+
+    <div class="hud-card">
+      <div class="log-line">
+        <span class="tag">STATUS</span> &nbsp;<span class="err">FAILED</span> — destination does not exist
+      </div>
+      <div class="log-line">
+        <span class="tag">URL</span> &nbsp;&nbsp;&nbsp;<span class="val" id="bad-url">unknown</span>
+      </div>
+      <div class="log-line">
+        <span class="tag">CAUSE</span> &nbsp;<span class="err">Area is undiscovered or has been removed</span>
+      </div>
+      <div class="log-line">
+        <span class="tag">ACTION</span> <span class="ok">Returning to last checkpoint...</span>
+        <span class="cursor"></span>
+      </div>
+    </div>
+
+    <div class="penalty-badge">
+      💀 RESPAWN AT ORIGIN
+    </div>
+
+    <br/>
+
+    <a class="return-btn" href="/">
+      ⚔️ &nbsp; RETURN TO BASE CAMP
+    </a>
+
+    <p class="footer-note">[ ↑↑↓↓←→←→BA ] for a secret on the main page</p>
+  </div>
+
+  <script>
+    // Show the bad URL
+    document.getElementById('bad-url').textContent = window.location.pathname;
+
+    // ── Particle field (matches ParticleField.js behavior) ──
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let W, H, particles;
+
+    const COLORS = ['#00f5ff','#7b2fff','#ff2d78','#ff6b00'];
+
+    function resize() {
+      W = canvas.width  = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+
+    function initParticles() {
+      particles = Array.from({ length: 60 }, () => ({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        r: Math.random() * 1.5 + 0.5,
+        color: COLORS[Math.floor(Math.random() * COLORS.length)],
+        alpha: Math.random() * 0.5 + 0.15,
+      }));
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      for (const p of particles) {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0) p.x = W;
+        if (p.x > W) p.x = 0;
+        if (p.y < 0) p.y = H;
+        if (p.y > H) p.y = 0;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = p.alpha;
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(draw);
+    }
+
+    resize();
+    initParticles();
+    draw();
+    window.addEventListener('resize', () => { resize(); initParticles(); });
+  </script>
+</body>
+</html>

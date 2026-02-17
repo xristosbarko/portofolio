@@ -1,0 +1,244 @@
+.quest-log {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ---- HEADER STATS ---- */
+.quest-header-card {
+  background: var(--bg-card);
+}
+
+.quest-stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  text-align: center;
+}
+
+.quest-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+  background: var(--bg-deep);
+  border-radius: 6px;
+  border: 1px solid var(--border-dim);
+}
+
+.qs-val {
+  font-family: var(--font-pixel);
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.qs-label {
+  font-family: var(--font-pixel);
+  font-size: 0.3rem;
+  color: var(--text-secondary);
+  letter-spacing: 1px;
+}
+
+/* ---- QUEST CARDS ---- */
+.quest-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.quest-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-dim);
+  border-radius: 8px;
+  padding: 18px;
+  cursor: pointer;
+  transition: all 0.25s;
+  position: relative;
+  overflow: hidden;
+  animation: questIn 0.4s ease both;
+}
+
+@keyframes questIn {
+  from { opacity: 0; transform: translateX(-12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.quest-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--quest-color, var(--neon-cyan));
+  transform: scaleY(0);
+  transition: transform 0.3s;
+  border-radius: 3px 0 0 3px;
+}
+
+.quest-card:hover {
+  border-color: var(--quest-color, var(--border-glow));
+  background: var(--bg-card-hover);
+}
+
+.quest-card:hover::before,
+.quest-card.expanded::before {
+  transform: scaleY(1);
+}
+
+.quest-card.accepted {
+  border-color: var(--quest-color, var(--border-glow));
+}
+
+/* ---- RIBBON ---- */
+.quest-ribbon {
+  position: absolute;
+  top: 12px;
+  right: -22px;
+  font-family: var(--font-pixel);
+  font-size: 0.3rem;
+  padding: 4px 30px;
+  transform: rotate(45deg);
+  transform-origin: center;
+  letter-spacing: 1px;
+}
+
+/* ---- QUEST MAIN ---- */
+.quest-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 60px;
+}
+
+.quest-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.quest-type {
+  font-family: var(--font-pixel);
+  font-size: 0.35rem;
+  letter-spacing: 2px;
+}
+
+.quest-name {
+  font-family: var(--font-hud);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.5px;
+}
+
+.quest-xp {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--neon-green);
+}
+
+.quest-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.accept-btn {
+  font-family: var(--font-pixel);
+  font-size: 0.38rem;
+  padding: 8px 14px;
+  background: transparent;
+  border: 1px solid;
+  border-radius: 4px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: all 0.2s;
+}
+
+.accept-btn:hover {
+  background: rgba(255,255,255,0.05);
+  box-shadow: 0 0 12px currentColor;
+}
+
+.accepted-badge {
+  font-family: var(--font-pixel);
+  font-size: 0.38rem;
+  color: var(--neon-green);
+  letter-spacing: 1px;
+  text-shadow: 0 0 8px var(--neon-green);
+}
+
+.expand-arrow {
+  font-size: 0.6rem;
+  color: var(--text-secondary);
+}
+
+/* ---- EXPANDED CONTENT ---- */
+.quest-expanded {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-dim);
+  animation: expandIn 0.25s ease;
+}
+
+@keyframes expandIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.quest-desc {
+  font-family: var(--font-hud);
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.quest-stack {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.stack-label {
+  font-family: var(--font-pixel);
+  font-size: 0.35rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.stack-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.stack-tag {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  padding: 3px 10px;
+  border: 1px solid;
+  border-radius: 3px;
+  background: rgba(0,0,0,0.2);
+}
+
+@media (max-width: 768px) {
+  .quest-stats-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .quest-main {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding-right: 50px;
+  }
+  .quest-right {
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 480px) {
+  .quest-stats-row { grid-template-columns: repeat(2, 1fr); }
+}

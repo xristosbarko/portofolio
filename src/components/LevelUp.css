@@ -1,0 +1,155 @@
+.levelup-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.85);
+  animation: overlayIn 0.3s ease;
+  cursor: pointer;
+}
+
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.levelup-box {
+  position: relative;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  animation: boxIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  padding: 48px 64px;
+  border: 2px solid var(--neon-cyan);
+  background: var(--bg-deep);
+  border-radius: 12px;
+  box-shadow:
+    0 0 40px rgba(0, 245, 255, 0.4),
+    0 0 80px rgba(0, 245, 255, 0.2),
+    inset 0 0 40px rgba(0, 245, 255, 0.05);
+  overflow: hidden;
+}
+
+@keyframes boxIn {
+  from { transform: scale(0.4) rotate(-8deg); opacity: 0; }
+  to { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+/* Animated corner accents */
+.levelup-box::before,
+.levelup-box::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-color: var(--neon-pink);
+  border-style: solid;
+  animation: cornerSpin 2s linear infinite;
+}
+
+.levelup-box::before {
+  top: 8px; left: 8px;
+  border-width: 2px 0 0 2px;
+}
+
+.levelup-box::after {
+  bottom: 8px; right: 8px;
+  border-width: 0 2px 2px 0;
+  animation-direction: reverse;
+}
+
+@keyframes cornerSpin {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* Flash sweep */
+.levelup-flash {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    45deg,
+    transparent 0%,
+    rgba(0, 245, 255, 0.15) 50%,
+    transparent 100%
+  );
+  background-size: 200% 200%;
+  animation: flashSweep 1.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes flashSweep {
+  0% { background-position: -100% -100%; }
+  100% { background-position: 200% 200%; }
+}
+
+.levelup-label {
+  font-family: var(--font-pixel);
+  font-size: 1.1rem;
+  color: var(--neon-cyan);
+  text-shadow:
+    0 0 20px var(--neon-cyan),
+    0 0 40px var(--neon-cyan),
+    0 0 80px rgba(0, 245, 255, 0.5);
+  letter-spacing: 4px;
+  animation: labelPulse 0.5s ease-in-out infinite alternate;
+  position: relative;
+}
+
+@keyframes labelPulse {
+  from { text-shadow: 0 0 20px var(--neon-cyan), 0 0 40px var(--neon-cyan); }
+  to { text-shadow: 0 0 30px var(--neon-cyan), 0 0 60px var(--neon-cyan), 0 0 100px rgba(0, 245, 255, 0.8); }
+}
+
+.levelup-level {
+  font-family: var(--font-pixel);
+  font-size: 3.5rem;
+  color: var(--neon-pink);
+  text-shadow:
+    0 0 20px var(--neon-pink),
+    0 0 40px var(--neon-pink);
+  line-height: 1;
+  position: relative;
+  animation: levelBounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+}
+
+@keyframes levelBounce {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.levelup-sub {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  color: var(--neon-green);
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px var(--neon-green);
+  position: relative;
+}
+
+.levelup-tap {
+  font-family: var(--font-pixel);
+  font-size: 0.38rem;
+  color: var(--text-secondary);
+  letter-spacing: 2px;
+  animation: tapBlink 1s step-end infinite;
+  position: relative;
+}
+
+@keyframes tapBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@media (max-width: 480px) {
+  .levelup-box {
+    padding: 32px 32px;
+    margin: 20px;
+  }
+  .levelup-label { font-size: 0.75rem; }
+  .levelup-level { font-size: 2.5rem; }
+}
