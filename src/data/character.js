@@ -10,7 +10,7 @@ export const CHARACTER = {
   location: "Athens, Greece",
   github: "https://github.com/xristosbarko",
   linkedin: "https://linkedin.com/in/xristosbarko",
-  email: "xristosbarko@hotmail.com",
+  email: "contact@christos-barkonikos.dev",
   bio: "A battle-hardened full-stack engineer who wields Python and React by day, deploys fortress-grade infrastructure with Docker & AWS, and hunts vulnerabilities with Kali Linux by night.",
 };
 
